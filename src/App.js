@@ -1,11 +1,10 @@
 import "./App.css";
+import Background from "./component/background";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src="logo.png" className="App-logo" alt="logo" />
-      </header>
+      <Background />
     </div>
   );
 }
