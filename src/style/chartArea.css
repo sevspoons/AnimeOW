@@ -1,0 +1,23 @@
+.chart-area {
+  position: absolute;
+  left: 30vw;
+  width: 70vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart {
+  width: 98%;
+  height: 98%;
+}
+
+.center {
+  width: 10vw;
+  height: 10vw;
+  position: absolute;
+  background-color: #00b8a9;
+  border-radius: 50%;
+  opacity: 0.7;
+}
