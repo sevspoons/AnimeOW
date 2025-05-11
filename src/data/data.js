@@ -9,6 +9,11 @@ function init() {
   tagMap = {};
   animeMap = {};
 
+  // 删去重名anime
+  animeData = animeData.filter(
+    (anime, index, self) =>
+      index === self.findIndex((a) => a.name === anime.name)
+  );
   // 构建animeMap
   animeData.forEach((anime) => {
     if (animeMap[anime.name] === undefined) {
@@ -19,6 +24,10 @@ function init() {
   animeData.forEach((anime) => {
     // 删去与anime重名的tag
     anime.tags = anime.tags.filter((tag) => animeMap[tag.name] === undefined);
+    // tags去重
+    anime.tags = anime.tags.filter(
+      (tag, index, self) => index === self.findIndex((t) => t.name === tag.name)
+    );
     // 构建tagMap
     anime.tags.forEach((tag) => {
       if (tagMap[tag.name] === undefined) {

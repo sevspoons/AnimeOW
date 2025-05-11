@@ -72,5 +72,19 @@
 }
 
 .ranker {
-  height: 35%;
+  height: 34%;
+  .rank-chart {
+    width: 100%;
+    height: 90%;
+  }
+  .rank-text {
+    width: 100%;
+    height: 10%;
+    font-weight: 600;
+    color: #a0a0a0;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 }

@@ -1,3 +1,4 @@
+import { Global } from "../global";
 import { getAnimeMap, getRandomAnime, getRandomTag, getTagMap } from "./data";
 
 const COLOR = {
@@ -21,6 +22,12 @@ export function getChartConfig(focus, { x, y }) {
 
   const [data, link] = getGraph(focus, { x, y });
 
+  link.forEach((l) => {
+    let count = parseInt(l.count);
+    l.lineStyle = {};
+    l.lineStyle.width = Math.min(10, Math.sqrt(count + 100) * 0.2);
+  });
+
   // 检查data中有无name相同的元素
   let nameSet = new Set();
   data.forEach((item) => {
@@ -35,6 +42,23 @@ export function getChartConfig(focus, { x, y }) {
   let res = {
     tooltip: {
       show: true,
+      formatter: function (params) {
+        var data = params.data;
+        if (data.category === Global.tag) {
+          // Tag
+          return `${data.name}<br />${
+            getTagMap()[data.name].length
+          } 个关联番剧`;
+        } else if (data.category === Global.anime) {
+          // 番剧
+          return `${data.name}<br />热度: ${
+            getAnimeMap()[data.name].rating.total
+          }`;
+        } else {
+          // 连线
+          return `关联度:  <span style="font-weight: 600;color: #f38181">${data.count}</span>`;
+        }
+      },
     },
     series: [
       {
@@ -60,19 +84,15 @@ export function getChartConfig(focus, { x, y }) {
         // 标记的图形
         symbol: "circle",
         // 关系边的公用线条样式。其中 lineStyle.color 支持设置为'source'或者'target'特殊值，此时边会自动取源节点或目标节点的颜色作为自己的颜色。
-        normal: {
-          lineStyle: {
-            // 线的颜色[ default: '#aaa' ]
-            color: "#fff",
-            // 线宽[ default: 1 ]
-            width: 1,
-            // 线的类型[ default: solid实线 ]   'dashed'虚线    'dotted'
-            type: "solid",
-            // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。[ default: 0.5 ]
-            opacity: 0.5,
-            // 边的曲度，支持从 0 到 1 的值，值越大曲度越大。[ default: 0 ]
-            curveness: 0.5,
-          },
+        lineStyle: {
+          // 线的颜色[ default: '#aaa' ]
+          color: "source",
+          // 线的类型[ default: solid实线 ]   'dashed'虚线    'dotted'
+          type: "solid",
+          // 图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。[ default: 0.5 ]
+          opacity: 0.6,
+          // 边的曲度，支持从 0 到 1 的值，值越大曲度越大。[ default: 0 ]
+          curveness: 0,
         },
         // 关系对象上的标签
         label: {
@@ -96,6 +116,9 @@ export function getChartConfig(focus, { x, y }) {
           },
           {
             name: "Tag",
+          },
+          {
+            name: "Link",
           },
         ],
         // 节点间的关系数据
@@ -150,6 +173,8 @@ function getGraph(focus, { x, y }) {
       link.push({
         target: tags[i].name,
         source: name,
+        category: "Link",
+        count: tags[i].count || "1",
       });
     }
 
@@ -182,6 +207,8 @@ function getGraph(focus, { x, y }) {
         link.push({
           target: anime.name,
           source: tag.name,
+          category: "Link",
+          count: anime.tags.find((item) => item.name === tag.map)?.count || "1",
         });
       }
     }
@@ -227,6 +254,8 @@ function getGraph(focus, { x, y }) {
       link.push({
         target: anime.name,
         source: name,
+        category: "Link",
+        count: anime.tags.find((item) => item.name === name)?.count || "1",
       });
     }
 
@@ -253,6 +282,8 @@ function getGraph(focus, { x, y }) {
         link.push({
           target: tag.name,
           source: anime.name,
+          category: "Link",
+          count: tag.count || "1",
         });
       }
     }
@@ -262,9 +293,9 @@ function getGraph(focus, { x, y }) {
 }
 
 function getAnimeSize(total) {
-  let base = 80;
-  let weight = 0.5;
-  return [Math.sqrt(total) * weight + base, Math.sqrt(total) * weight + base];
+  let base = 60;
+  let weight = 0.01;
+  return [total * weight + base, total * weight + base];
 }
 
 function getTagSize(count) {
