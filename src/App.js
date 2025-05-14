@@ -4,12 +4,17 @@ import InfoPanel from "./component/infoPanel";
 import ChartArea from "./component/chartArea";
 import { createContext, useState } from "react";
 import { Global } from "./global";
+import { getRandomAnime, getRandomTag } from "./data/data";
 
 export const ControlContext = createContext(Global.control);
 
 function App() {
   const [mode, setMode] = useState(Global.staticMode); //展示静态数据 动态选中数据
-  const [focus, setFocus] = useState(null); //选中节点数据
+
+  // 随机获取一个anime或tag
+  let randomIndex = Math.floor(Math.random() * 2);
+  let data = randomIndex === 0 ? getRandomAnime() : getRandomTag();
+  const [focus, setFocus] = useState(data); //选中节点数据
 
   return (
     <ControlContext.Provider

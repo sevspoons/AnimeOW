@@ -1,5 +1,5 @@
 import { Global } from "../global";
-import { getAnimeMap, getRandomAnime, getRandomTag, getTagMap } from "./data";
+import { getAnimeMap, getTagMap } from "./data";
 
 const COLOR = {
   centerA: "##aa96da",
@@ -14,12 +14,6 @@ const ROUNDNUM1 = 10;
 const ROUNDNUM2 = 5;
 
 export function getChartConfig(focus, { x, y }) {
-  if (focus === null) {
-    // 随机获取一个anime或tag
-    let randomIndex = Math.floor(Math.random() * 2);
-    focus = randomIndex === 0 ? getRandomAnime() : getRandomTag();
-  }
-
   const [data, link] = getGraph(focus, { x, y });
 
   link.forEach((l) => {
@@ -71,9 +65,9 @@ export function getChartConfig(focus, { x, y }) {
         force: {
           // 力引导布局的结果有良好的对称性和局部聚合性，也比较美观。
           // [ default: 50 ]节点之间的斥力因子(关系对象之间的距离)。支持设置成数组表达斥力的范围，此时不同大小的值会线性映射到不同的斥力。值越大则斥力越大
-          repulsion: 300,
+          repulsion: 500,
           // [ default: 30 ]边的两个节点之间的距离(关系对象连接线两端对象的距离,会根据关系对象值得大小来判断距离的大小)，
-          edgeLength: [200, 150],
+          edgeLength: 80,
           // 这个距离也会受 repulsion。支持设置成数组表达边长的范围，此时不同大小的值会线性映射到不同的长度。值越小则长度越长。如下示例:
           // 值最大的边长度会趋向于 10，值最小的边长度会趋向于 50      edgeLength: [10, 50]
         },
@@ -295,7 +289,7 @@ function getGraph(focus, { x, y }) {
 function getAnimeSize(total) {
   let base = 60;
   let weight = 0.01;
-  return [total * weight + base, total * weight + base];
+  return total * weight + base;
 }
 
 function getTagSize(count) {
