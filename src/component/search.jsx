@@ -1,25 +1,44 @@
 import { ControlContext } from "../App";
 import { getSearchData } from "../data/data";
+import { SearchIcon } from "../static/icon";
 import "../style/search.css";
 import { useContext, useState } from "react";
 
-const maxSearchResults = 10; // 最大搜索结果数量
+const maxSearchResults = 100; // 最大搜索结果数量
 
 export function Search() {
   const items = getSearchData(); // 获取搜索数据
-  const [focus, setFocus] = useContext(ControlContext).focus;
+  const setFocus = useContext(ControlContext).focus[1];
+  const [show, setShow] = useState(false); // 控制搜索框的显示和隐藏
 
   const handleItemSelected = (value) => {
     // 这里是您想要执行的回调函数
     setFocus(value); // 设置选中节点数据
+    setShow(false); // 隐藏搜索框
   };
-
-  const [show, setShow] = useState(false); // 控制搜索框的显示和隐藏
-
-  return show ? (
-    <div items={items} onItemSelected={handleItemSelected} />
-  ) : (
-    <div className="search-container">111</div>
+  return (
+    <div className="search-container">
+      {show ? (
+        <>
+          <SearchComponent items={items} onItemSelected={handleItemSelected} />
+          <div
+            onClick={() => {
+              setShow(false);
+            }}
+          >
+            <SearchIcon />
+          </div>
+        </>
+      ) : (
+        <div
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          <SearchIcon />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -47,21 +66,37 @@ const SearchComponent = ({ items, onItemSelected }) => {
   };
 
   return (
-    <div className="search-container">
+    <div>
       <input
+        className="search-input"
         type="text"
         placeholder="Search..."
         value={searchTerm}
         onChange={handleSearch}
         autoComplete="off"
       />
-      <ul>
+      <div className="search-result">
         {filteredItems.map((item, index) => (
-          <li key={index} onClick={() => handleItemClick(item.value)}>
-            {item.label + " : " + item.type}
-          </li>
+          <div
+            className="search-item"
+            key={index}
+            onClick={() => handleItemClick(item.value)}
+          >
+            <div
+              style={{
+                backgroundColor: item.type === "anime" ? "#f38181" : "#11999e",
+                color: "#fff",
+                padding: "2px 5px 5px 5px",
+                borderRadius: "5px",
+                marginRight: "5px",
+              }}
+            >
+              {item.type}
+            </div>
+            {item.label}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

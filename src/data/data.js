@@ -46,13 +46,13 @@ function init() {
     searchData.push({
       label: anime.name,
       value: anime,
-      type: "anime",
+      type: "Anime",
     });
     if (anime.name_cn) {
       searchData.push({
         label: anime.name_cn,
         value: anime,
-        type: "anime",
+        type: "Anime",
       });
     }
   }
@@ -61,7 +61,7 @@ function init() {
     searchData.push({
       label: tag,
       value: tag,
-      type: "tag",
+      type: "Tag",
     });
   }
 }
