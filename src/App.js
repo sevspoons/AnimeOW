@@ -6,6 +6,7 @@ import { createContext, useState } from "react";
 import { Global } from "./global";
 import { getRandomAnime, getRandomTag } from "./data/data";
 import { Search } from "./component/search";
+import { StaticInfo } from "./component/staticInfo";
 
 export const ControlContext = createContext(Global.control);
 
@@ -23,7 +24,7 @@ function App() {
     >
       <div className="App">
         <Background />
-        <InfoPanel />
+        {mode === Global.staticMode ? <StaticInfo /> : <InfoPanel />}
         <ChartArea />
         <Search />
       </div>
