@@ -4,6 +4,7 @@ const minLink = 5; // 最小连接数
 
 let tagMap = null;
 let animeMap = null;
+let searchData = null;
 
 function init() {
   tagMap = {};
@@ -37,6 +38,32 @@ function init() {
       }
     });
   });
+
+  // 构建searchData
+  searchData = [];
+  for (let anime of Object.values(animeMap)) {
+    // 名称 / 中文名称 => anime
+    searchData.push({
+      label: anime.name,
+      value: anime,
+      type: "anime",
+    });
+    if (anime.name_cn) {
+      searchData.push({
+        label: anime.name_cn,
+        value: anime,
+        type: "anime",
+      });
+    }
+  }
+  for (let tag of Object.keys(tagMap)) {
+    // tag => tag
+    searchData.push({
+      label: tag,
+      value: tag,
+      type: "tag",
+    });
+  }
 }
 
 export function getTagMap() {
@@ -51,6 +78,13 @@ export function getAnimeMap() {
     init();
   }
   return animeMap;
+}
+
+export function getSearchData() {
+  if (!searchData) {
+    init();
+  }
+  return searchData;
 }
 
 export function getRandomAnime() {

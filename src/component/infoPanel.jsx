@@ -304,8 +304,6 @@ function tagTagOption(tag) {
   data.sort((a, b) => b.value - a.value);
   data = data.length > NUM ? data.slice(0, NUM) : data;
 
-  console.log(data);
-
   return {
     title: {
       text: `共${len}个相关Tag`,

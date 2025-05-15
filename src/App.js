@@ -5,6 +5,7 @@ import ChartArea from "./component/chartArea";
 import { createContext, useState } from "react";
 import { Global } from "./global";
 import { getRandomAnime, getRandomTag } from "./data/data";
+import { Search } from "./component/search";
 
 export const ControlContext = createContext(Global.control);
 
@@ -24,6 +25,7 @@ function App() {
         <Background />
         <InfoPanel />
         <ChartArea />
+        <Search />
       </div>
     </ControlContext.Provider>
   );
